@@ -1,0 +1,6 @@
+#!/bin/bash
+
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+source ${SCRIPTDIR}/config
+
+ssh -p ${SSH_PORT} -i ${SSH_KEY} ${SSH_USER}@${SSH_HOSTNAME} ${INSTALL_PREFIX_ON_SERVER}/acme_proxy/pre_challenge ${CERTBOT_TOKEN} ${PROXY_TARGET}

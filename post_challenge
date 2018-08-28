@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ `whoami` != "root" ] && [ `whoami` != "www-data" ] ; then sudo $0 $@ ; exit 0 ; fi
+
+CERTBOT_TOKEN=$1
+
+# test if CERTBOT_TOKEN is valid
+if [[ ! "$CERTBOT_TOKEN" =~ ^[0-9A-z_\-]+$ ]]; then
+	exit 1
+fi
+
+
+SCRIPTPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+
+source ${SCRIPTPATH}/config
+
+# Delete configuration file
+rm "${NGINX_CONF_DIR}/acmeconf.d/${CERTBOT_TOKEN}.conf"
+
+# reload nginx
+${SCRIPTPATH}/reload_nginx

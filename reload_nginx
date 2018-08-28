@@ -1,0 +1,5 @@
+#!/bin/bash
+
+if [ `whoami` != "root" ] && [ `whoami` != "www-data" ] ; then sudo $0 $@ ; exit 0 ; fi
+
+nginx -s reload

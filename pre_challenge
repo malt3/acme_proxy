@@ -1,0 +1,35 @@
+#!/bin/bash
+
+if [ `whoami` != "root" ] && [ `whoami` != "www-data" ] ; then sudo $0 $@ ; exit 0 ; fi
+
+
+CERTBOT_TOKEN=$1
+PROXY_TARGET=$2
+
+# test if CERTBOT_TOKEN and PROXY_TARGET are valid
+if [[ ! "$CERTBOT_TOKEN" =~ ^[0-9A-z_\-]+$ ]]; then
+	exit 1
+fi
+
+if [[ "$PROXY_TARGET" =~ \s|\; ]]; then
+	exit 1
+fi
+
+SCRIPTPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+
+# Load configuration
+source ${SCRIPTPATH}/config
+
+
+# Read template file
+TEMPLATE=$(<${SCRIPTPATH}/challenge.conf.template)
+
+# Replace placeholders
+TEMPLATE="${TEMPLATE/\{CERTBOT_TOKEN\}/$CERTBOT_TOKEN}"
+TEMPLATE="${TEMPLATE/\{PROXY_TARGET\}/$PROXY_TARGET}"
+
+# Write configuration file
+echo "$TEMPLATE" > "${NGINX_CONF_DIR}/acmeconf.d/${CERTBOT_TOKEN}.conf"
+
+# Reload nginx
+${SCRIPTPATH}/reload_nginx

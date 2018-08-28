@@ -1,0 +1,7 @@
+SSH_HOSTNAME="example.com"
+SSH_USER="acme_proxy"
+SSH_PORT="22"
+SSH_KEY="~/.ssh/id_rsa"
+INSTALL_PREFIX_ON_SERVER="/opt"
+PROXY_TARGET="subdomain.example.com:80"
+

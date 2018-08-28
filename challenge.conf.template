@@ -1,0 +1,3 @@
+location /.well-known/acme-challenge/{CERTBOT_TOKEN} {
+	proxy_pass http://{PROXY_TARGET};
+}
